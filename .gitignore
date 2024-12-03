@@ -4,3 +4,4 @@ __pycache__/
 myenv/
 
 db.sqlite3
+chatbot.log
