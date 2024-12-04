@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dotenv import load_dotenv
 from openai import AzureOpenAI
+import logging
 
 
 conversations = {}
@@ -26,20 +27,22 @@ def remove_references(response):
 
 @csrf_exempt
 def chat(request):
+    logger = logging.getLogger('chatbot')
    
     load_dotenv()
     http_proxy = os.getenv('proxy')  
     https_proxy = os.getenv('proxy')  
 
-    if http_proxy:
-        os.environ['http_proxy'] = http_proxy
-    if https_proxy:
-        os.environ['https_proxy'] = https_proxy
+    # if http_proxy:
+    #     os.environ['http_proxy'] = http_proxy
+    # if https_proxy:
+    #     os.environ['https_proxy'] = https_proxy
        
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         message = data.get('message')  
         session = data.get('session')
+        logger.info(f'Received message: {message}')
   
         try:
             endpoint = os.getenv('ENDPOINT_URL')
@@ -78,9 +81,6 @@ def chat(request):
             for conv in filtered_conversations:
                 chat_prompt.append(dict(conv))
                 
-            
-            print(chat_prompt)
-            print('-'*100)
             # Generate the completion  
             completion = client.chat.completions.create(  
                 model=deployment,  
@@ -120,10 +120,11 @@ def chat(request):
             )
             response = bold_text(remove_references(completion.choices[0].message.content))
             conversations[session].append({'role': 'assistant', 'content': response})
+      
+            logger.info(f'Sending response: {response}')
             
-            print(conversations)
             return JsonResponse({'response': response})
  
         except Exception as e:
-            print(e)
+            logger.info(f'An unexpected error occurred. Please try again later. {str(e)}')
             return JsonResponse({'response': f"An unexpected error occured please try later."})

@@ -5,3 +5,4 @@ myenv/
 .venv/
 
 db.sqlite3
+chatbot.log
