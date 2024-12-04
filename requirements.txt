@@ -41,3 +41,4 @@ urllib3==2.2.3
 Werkzeug==3.0.6
 yarl==1.17.0
 whitenoise
+django-cors-headers
