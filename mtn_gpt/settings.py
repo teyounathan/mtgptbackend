@@ -168,6 +168,7 @@ LOGGING = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'https://mtngptfrontend.azurewebsites.net',
+    'https://lemon-sand-08b69150f.4.azurestaticapps.net/'
 ]
 
 CORS_ALLOW_METHODS = [
