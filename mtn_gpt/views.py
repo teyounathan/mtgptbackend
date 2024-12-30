@@ -100,7 +100,7 @@ def chat(request):
                     "endpoint": f"{search_endpoint}",
                     "index_name": f"{search_index}",
                     "semantic_configuration": "default",
-                    "query_type": "semantic",
+                    "query_type": "vector_semantic_hybrid",
                     "fields_mapping": {},
                     "in_scope": True,
                     "role_information": f"""
@@ -115,6 +115,10 @@ def chat(request):
                     "authentication": {
                         "type": "api_key",
                         "key": f"{search_key}"
+                    },
+                    "embedding_dependency": {
+                        "type": "deployment_name",
+                        "deployment_name": "text-embedding-ada-002"
                     }
                     }
                 }]
