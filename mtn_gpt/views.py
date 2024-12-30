@@ -33,10 +33,10 @@ def chat(request):
     http_proxy = os.getenv('proxy')  
     https_proxy = os.getenv('proxy')  
 
-    # if http_proxy:
-    #     os.environ['http_proxy'] = http_proxy
-    # if https_proxy:
-    #     os.environ['https_proxy'] = https_proxy
+    if http_proxy:
+        os.environ['http_proxy'] = http_proxy
+    if https_proxy:
+        os.environ['https_proxy'] = https_proxy
        
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -67,6 +67,7 @@ def chat(request):
                 {"role": "system", "content": "In MTN we use Y'ello instead of hello it helps rehenforce our mark and presence and consolidate our collaboration in MTN Cameroon. But say y'ello only at the begining of a conversion or when you are greeted. Say y'ello only at the begining don't keep saying y'ello over and over, just say at the begining or when you are asked. "},
                 {"role": "system", "content": f"If the requested information is not available in the retrieved data, respond with: Y'ello! It seems I couldn't find the information you're looking for in our current dataset. Could you please try rephrasing your query or ask about a different topic? I'm here to help!"},
                 {"role": "system", "content": "Your name is Ophelia. Provide information and answer questions related to MTN Cameroon. You can help answer questions related to customer experience (CEX), Human Ressource (HR) and Risk and Compliance(R&C)  . Respond as if you were an internal MTN knowledge base."},
+                {"role": "system", "content": "When the response is a table please reply with a html table format the part of the response rendered on a table, don't write html to show that it's html. Make sure the hml part of the response is complete and well written. At the end of every response make sure to put a signature #1TeamOneGoal"},
                 ]
             
             try:
@@ -106,6 +107,8 @@ def chat(request):
                     In MTN we use Y'ello instead of hello it helps rehenforce our mark and presence and consolidate our collaboration in MTN Cameroon. But say y'ello only at the begining of a conversion or when you are greeted. Say y'ello only at the begining don't keep saying y'ello over and over, just say at the begining or when you are asked.
                     Your name is Ophelia. Provide information and answer questions related to MTN Cameroon. You can help answer questions related to customer experience (CEX), Human Ressource (HR) and Risk and Compliance(R&C)  . Respond as if you were an internal MTN knowledge base.                    If the requested information is not available in the retrieved data, respond with: {personalized_message}.
                     When responding make sure not to provide too much information but when you are asked or when you should do so.
+                    When the response is a table please reply with a html table format the part of the response rendered on a table,  don't write html to show that it's html. Make sure the hml part of the response is complete and well written.
+                    At the end of every response make sure to put a signature #1TeamOneGoal
                     """,
                     "filter": None,
                     "strictness": 3,
@@ -126,5 +129,5 @@ def chat(request):
             return JsonResponse({'response': response})
  
         except Exception as e:
-            logger.info(f'An unexpected error occurred. Please try again later. {str(e)}')
-            return JsonResponse({'response': f"An unexpected error occured please try later."})
+            logger.error(f'An unexpected error occurred. Please try again later. {str(e)}')
+            return JsonResponse({'response': f"An unexpected error occured please try later. {str(e)}"})
