@@ -107,7 +107,6 @@ def chat(request):
                     In MTN we use Y'ello instead of hello it helps rehenforce our mark and presence and consolidate our collaboration in MTN Cameroon. But say y'ello only at the begining of a conversion or when you are greeted. Say y'ello only at the begining don't keep saying y'ello over and over, just say at the begining or when you are asked.
                     Your name is Ophelia. Provide information and answer questions related to MTN Cameroon. You can help answer questions related to customer experience (CEX), Human Ressource (HR) and Risk and Compliance(R&C)  . Respond as if you were an internal MTN knowledge base.                    If the requested information is not available in the retrieved data, respond with: {personalized_message}.
                     When responding make sure not to provide too much information but when you are asked or when you should do so.
-                    When the response is a table please reply with a html table format the part of the response rendered on a table,  don't write html to show that it's html. Make sure the hml part of the response is complete and well written.
                     At the end of every response make sure to put a signature #1TeamOneGoal
                     """,
                     "filter": None,
@@ -129,5 +128,7 @@ def chat(request):
             return JsonResponse({'response': response})
  
         except Exception as e:
+            status_code = getattr(e, 'status_code', 400)
+
             logger.error(f'An unexpected error occurred. Please try again later. {str(e)}')
-            return JsonResponse({'response': f"An unexpected error occured please try later. {str(e)}"})
+            return JsonResponse({'response': f"An unexpected error occured please try later. {str(e)}"}, status=status_code)
